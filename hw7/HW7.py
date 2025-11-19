@@ -5,14 +5,14 @@ import urllib3
 import json
 
 # ----------------------------------------------------------
-# 1. 설정 영역 (사진 속 인증키 적용)
+# 1. 설정 영역
 # ----------------------------------------------------------
 API_KEY = "526b01c6365799e06da88d2d3d8ca3c33514cf8c66c20aeb3474be9f44ca116d"
 
 # 기본 URL
 BASE_URL = "http://apis.data.go.kr/1360000/AsosHourlyInfoService/getWthrDataList"
 
-# 지점 번호 (서울)
+# 종관 번호 (서울)
 STATION_ID = "108"
 
 # ----------------------------------------------------------
@@ -30,14 +30,11 @@ targets = [
 
 
 # ----------------------------------------------------------
-# 3. 핵심 함수 (GPT 방식 적용: URL 직접 조립)
+# 3. 핵심 함수
 # ----------------------------------------------------------
 def get_weather_data(date_str, hour):
     hour_str = str(hour).zfill(2)
 
-    # [핵심 수정] params 딕셔너리에 키를 넣지 않고, URL 뒤에 직접 붙입니다.
-    # 이렇게 하면 requests가 인증키를 멋대로 인코딩하는 것을 막을 수 있습니다.
-    # numofRows도 100으로 넉넉하게 잡았습니다.
     query_url = f"{BASE_URL}?serviceKey={API_KEY}&pageNo=1&numOfRows=100&dataType=JSON&dataCd=ASOS&dateCd=HR&startDt={date_str}&startHh={hour_str}&endDt={date_str}&endHh={hour_str}&stnIds={STATION_ID}"
 
     try:
@@ -90,7 +87,7 @@ if __name__ == "__main__":
         # cols = ['tm', 'stnId', 'ta', 'rn', 'ws', 'wd', 'hm']
         # df = df[cols] if set(cols).issubset(df.columns) else df
 
-        output_filename = "HW7_result.csv"
+        output_filename = "hw7_result.csv"
         df.to_csv(output_filename, index=False, encoding="utf-8-sig")
 
         print("-" * 60)
